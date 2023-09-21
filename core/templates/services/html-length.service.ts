@@ -33,7 +33,10 @@ export class HtmlLengthService {
     * ['oppia-noninteractive-image', 'oppia-noninteractive-math']
     * The above tags constitutes for non text nodes.
     */
-  nonTextTags = ['oppia-noninteractive-math', 'oppia-noninteractive-image'];
+  nonTextTagsWithWeight = [
+    ['oppia-noninteractive-math', 0],
+    ['oppia-noninteractive-image', 0]
+  ];
 
   /**
     * ['li','blockquote','em','strong', 'p', 'a']
@@ -41,7 +44,13 @@ export class HtmlLengthService {
     * em, a, strong occur as descendants of p tag. li tags are
     * descendants of ol/ul tags.
     */
-  textTags = ['p', 'ul', 'ol'];
+  textTagsWithWeight = [
+    ['a', 1],
+    ['collapsible', 1000],
+    ['p', 1],
+    ['ul', 1],
+    ['ol', 1]
+  ];
 
   computeHtmlLengthInWords(htmlString: string): number {
     if (!htmlString) {
@@ -58,10 +67,10 @@ export class HtmlLengthService {
     let totalWeight = 0;
     for (let tag of tagList) {
       const ltag = tag.tagName.toLowerCase();
-      if (this.textTags.includes(ltag)) {
+      if (this.textTagsWithWeight.some(item => item[0] === ltag)) {
         totalWeight += this.getWeightForTextNodes(tag as HTMLElement);
       }
-      if (this.nonTextTags.includes(ltag)) {
+      if (this.nonTextTagsWithWeight.some(item => item[0] === ltag)) {
         totalWeight += this.getWeightForNonTextNodes(tag as HTMLElement);
       }
     }
@@ -72,22 +81,19 @@ export class HtmlLengthService {
     const textContent = textNode.textContent || '';
     const words = textContent.trim().split(' ');
     const wordCount = words.length;
+    const ltag = textNode.tagName.toLowerCase();
+    if(ltag === 'a') {
+      return textContent.length;
+    }
+    const weight = this.textTagsWithWeight.find(x => x[0] === ltag)[1] as number;
 
-    return wordCount;
+    return wordCount * weight;
   }
 
   private getWeightForNonTextNodes(nonTextNode: HTMLElement): number {
-    if (nonTextNode.tagName.toLowerCase() === 'oppia-noninteractive-math') {
-      return 1;
-    }
-    // <oppia-noninteractive-image>
-    const altText = nonTextNode.getAttribute('alt-with-value');
-    let wordCount = 0;
-    if (altText) {
-      wordCount = altText.trim().split(' ').length;
-    }
-    // +2 is a bonus for images as sometimes images have text
-    // which needs to be translated as well.
-    return wordCount + 2;
+    const ltag = nonTextNode.tagName.toLowerCase();
+    const weight = this.nonTextTagsWithWeight.find(x => x[0] === ltag)[1];
+
+    return weight as number;
   }
 }
