@@ -98,6 +98,9 @@ export class FeatureStatusSummary {
 
   static createFromBackendDict(
       backendDict: FeatureStatusSummaryBackendDict): FeatureStatusSummary {
+    if (backendDict === undefined) {
+      throw new Error('backendDict is undefined');
+    }
     return new FeatureStatusSummary(backendDict);
   }
 
