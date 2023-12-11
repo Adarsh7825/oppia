@@ -1551,6 +1551,7 @@ class InteractionInstance(translation_domain.BaseTranslatableObject):
         # customization args always contains 'minAllowableSelectionCount' key
         # with int type of values.
         min_value = self.customization_args['minAllowableSelectionCount'].value
+
         # Here we use cast because we are narrowing down the type from
         # various allowed cust. arg types to 'int', and here we are sure
         # that the type is always going to be int because 'ItemInputSelection'
@@ -1559,10 +1560,13 @@ class InteractionInstance(translation_domain.BaseTranslatableObject):
         max_value = self.customization_args['maxAllowableSelectionCount'].value
 
         if min_value is not None and max_value is not None:
-            min_value = cast(int, min_value)
-            max_value = cast(int, max_value)
+            min_value = cast(int, min_value) # pylint: disable=useless-cast
+            max_value = cast(int, max_value) # pylint: disable=useless-cast
         else:
-            raise ValueError('minAllowableSelectionCount or maxAllowableSelectionCount is None')
+        # Raises:
+        # ValueError. If minAllowableSelectionCount or maxAllowableSelectionCount is None.
+            raise
+                ValueError('minAllowableSelectionCount or maxAllowableSelectionCount is None')
 
         rule_spec_till_now: List[RuleSpecDict] = []
 
