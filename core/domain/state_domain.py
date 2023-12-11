@@ -1564,9 +1564,9 @@ class InteractionInstance(translation_domain.BaseTranslatableObject):
             max_value = cast(int, max_value) # pylint: disable=useless-cast
         else:
         # Raises:
-        # ValueError. If minAllowableSelectionCount or maxAllowableSelectionCount is None.
+        #     ValueError. If minAllowableSelectionCount or maxAllowableSelectionCount is None.
             raise
-                ValueError('minAllowableSelectionCount or maxAllowableSelectionCount is None')
+            ValueError('minAllowableSelectionCount or maxAllowableSelectionCount is None')
 
         rule_spec_till_now: List[RuleSpecDict] = []
 
