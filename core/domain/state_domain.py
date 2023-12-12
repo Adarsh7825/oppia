@@ -1565,10 +1565,9 @@ class InteractionInstance(translation_domain.BaseTranslatableObject):
             # with int type of values.
             max_value = cast(int, max_value)
         else:
-            # Raise a valueError if min or max values is None
-            raise ValueError(
-                'min or max values is None'
-            )
+            # Raise a ValueError if min or max values are None
+            raise ValueError('Either min or max value is None')
+
 
         rule_spec_till_now: List[RuleSpecDict] = []
 
