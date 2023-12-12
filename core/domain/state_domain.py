@@ -1536,6 +1536,7 @@ class InteractionInstance(translation_domain.BaseTranslatableObject):
             strict: bool. If True, the exploration is assumed to be published.
 
         Raises:
+            ValueError. Raised when min or max values are None.
             ValidationError. Duplicate rules are present.
             ValidationError. The 'Equals' rule does not have value between min
                 and max number of selections.
@@ -1566,7 +1567,7 @@ class InteractionInstance(translation_domain.BaseTranslatableObject):
         else:
             # Raise a ValueError if min or max values are None
             raise ValueError(
-                'min or max vaules is None'
+                'min or max values is None'
             )
 
         rule_spec_till_now: List[RuleSpecDict] = []
