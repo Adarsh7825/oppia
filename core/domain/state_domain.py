@@ -1536,6 +1536,7 @@ class InteractionInstance(translation_domain.BaseTranslatableObject):
             strict: bool. If True, the exploration is assumed to be published.
 
         Raises:
+            ValueError if min or max values are None
             ValidationError. Duplicate rules are present.
             ValidationError. The 'Equals' rule does not have value between min
                 and max number of selections.
@@ -1551,20 +1552,19 @@ class InteractionInstance(translation_domain.BaseTranslatableObject):
         if min_value is not None and max_value is not None:
             # Here we use cast because we are narrowing down the type from
             # various allowed cust. arg types to 'int', and here we are sure
-            # that the type is always going to be int because 
+            # that the type is always going to be int because
             # 'ItemInputSelection' customization args always contains
             # 'maxAllowableSelectionCount' key
             # with int type of values.
             min_value = cast(int, min_value)
             # Here we use cast because we are narrowing down the type from
             # various allowed cust. arg types to 'int', and here we are sure
-            # that the type is always going to be int because 
+            # that the type is always going to be int because
             # 'ItemInputSelection' customization args always contains
             # 'maxAllowableSelectionCount' key
             # with int type of values.
             max_value = cast(int, max_value)
         else:
-            # Raise a ValueError if min or max values are None
             raise ValueError(
                 'min or max vaules is None'
             )
